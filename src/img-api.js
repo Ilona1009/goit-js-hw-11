@@ -1,4 +1,4 @@
-import axios from "axios";
+const axios = require('axios').default;
 
 export default class ApiPhotoService {
     constructor() {
@@ -8,34 +8,43 @@ export default class ApiPhotoService {
         this.PER_PAGE = 40;
         this.searchQuery = '';
     }
-}
 
-async function fetchPhoto() {
+
+    async fetchPhoto() {
     
-    const searchParams = new URLSearchParams({
-        key: this.KEY,
-        q: this.searchQuery,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: true,
-        page: this.PAGE,
-        per_page: this.PER_PAGE,
-    });
-
-    const url = `${this.URl}?${searchParams}`;
-
-    try {
-        const response = await axios.get(url); 
-        if (!response.ok) {
-            console.log(response.data);
-            throw new Error(response.statusText)
+        const searchParams = new URLSearchParams({
+            key: this.KEY,
+            q: this.searchQuery,
+            image_type: 'photo',
+            orientation: 'horizontal',
+            safesearch: true,
+            page: this.PAGE,
+            per_page: this.PER_PAGE,
+        });
+        const newParams = searchParams.toString()
+        try{ const response = await axios.get(`${this.URL}?${newParams}`)
+        if (response.status !== 200) {
+            throw new Error(response.status);
+          }
+          this.PAGE += 1;
+          return response.data;
+        } catch (error) {
+         console.log();(error.message);
         }
-        return response.data;
-    } 
-    catch (error){
-    };
+    }
+    get page(){
+        return this.PAGE;
+    }
+    set page(newPage){
+        this.PAGE = newPage;
+    }
+    resetPage(){
+        this.PAGE = 1;
+    }
+    get query(){
+        return this.searchQuery;
+    }
+    set query(newQuery){
+        this.searchQuery = newQuery;
+    }
 }
-
-
-
-
