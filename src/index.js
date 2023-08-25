@@ -1,4 +1,5 @@
 import ApiPhotoService from './img-api';
+import Notiflix from 'notiflix';
 
 const refs = {
     searchForm: document.getElementById('search-form'),
@@ -7,7 +8,6 @@ const refs = {
 }
 
 refs.searchForm.addEventListener('submit', onSearch);
-// refs.bt_js.addEventListener('click', onClick)
 
 let totalPage = 13;
 
@@ -16,14 +16,21 @@ const apiPhotoService = new ApiPhotoService();
 
  function onSearch(e) {
     e.preventDefault();
-    apiPhotoService.query = e.currentTarget.elements.searchQuery.value;
+   apiPhotoService.query = e.currentTarget.elements.searchQuery.value;
+   if (apiPhotoService.query === '') {
+        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+       return;
+     }
 
     apiPhotoService.resetPage();
-    apiPhotoService.fetchPhoto().then(data => {
-        console.log(data);
-        //  const {hits, totalHits} = data;
+   apiPhotoService.fetchPhoto().then(data => {
+     const {hits, totalHits} = data;
+     if (hits.length === 0) {
+       Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+       return;
+     }
+     
              renderMarkupPhotos(data);
-
     })
 }
 
