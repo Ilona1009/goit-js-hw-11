@@ -1,10 +1,13 @@
 import ApiPhotoService from './img-api';
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const refs = {
     searchForm: document.getElementById('search-form'),
     allPhotos : document.querySelector('.gallery'),
-    // bt_js: document.querySelector('.btn_js'),
+    btnLoadMore: document.querySelector('.btn-js'),
+    guard: document.querySelector('.guard'),
 }
 
 refs.searchForm.addEventListener('submit', onSearch);
@@ -13,11 +16,21 @@ let totalPage = 13;
 
 const apiPhotoService = new ApiPhotoService();
 
+const lightbox = new SimpleLightbox('.photo-link',{
+    captionsDelay: 100,
+}
+);
+
+function observeObj(entries) {
+  console.log(entries)
+}
 
  function onSearch(e) {
     e.preventDefault();
    apiPhotoService.query = e.currentTarget.elements.searchQuery.value;
+   clearAll();
    if (apiPhotoService.query === '') {
+     clearAll();
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
        return;
      }
@@ -26,11 +39,13 @@ const apiPhotoService = new ApiPhotoService();
    apiPhotoService.fetchPhoto().then(data => {
      const {hits, totalHits} = data;
      if (hits.length === 0) {
+       clearAll();
        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
        return;
      }
      
-             renderMarkupPhotos(data);
+     renderMarkupPhotos(data);
+      Notify.success(`Hooray! We found ${totalHits} images.`);
     })
 }
 
@@ -66,9 +81,14 @@ const apiPhotoService = new ApiPhotoService();
         </div>
         </a>
         `).join('')
-    //  console.log(markup);
-      refs.allPhotos.insertAdjacentHTML('beforeend',markup);
+   refs.allPhotos.insertAdjacentHTML('beforeend', markup);
+   lightbox.refresh();
 }
+
+function clearAll(){
+    refs.allPhotos.innerHTML = '';
+}
+
 
 
 
