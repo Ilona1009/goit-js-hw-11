@@ -11,6 +11,7 @@ const refs = {
 }
 
 refs.searchForm.addEventListener('submit', onSearch);
+// document.addEventListener('scroll', lightScroll)
 
 let totalPage = 13;
 
@@ -21,9 +22,37 @@ const lightbox = new SimpleLightbox('.photo-link',{
 }
 );
 
-function observeObj(entries) {
-  console.log(entries)
+const params = {
+  root: null,
+  rootMargin: '200px',
+  threshold: 1
+};
+
+function observeObj(entries){
+console.log(entries)
+entries.forEach(entry => {
+  if (entry.isIntersecting) {
+    observer.unobserve(entry.target);
+    apiPhotoService.page += 1;
+    if (entry.intersectionRatio === 1 && apiPhotoService.page === totalPage) {
+      Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+  }
+    apiPhotoService.fetchPhoto().then(data =>{  
+      renderMarkupPhotos(data);
+      const hasPhoto = apiPhotoService.page < totalPage && data.totalHits === 500;
+      if (hasPhoto) {
+        if (data.totalHits < 500) {
+            return;
+        }
+        observer.observe(refs.guard);
+    }
+  })
 }
+})
+};
+
+const observer = new IntersectionObserver(observeObj, params);
+
 
  function onSearch(e) {
     e.preventDefault();
@@ -45,7 +74,7 @@ function observeObj(entries) {
      }
      
      renderMarkupPhotos(data);
-      Notify.success(`Hooray! We found ${totalHits} images.`);
+      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
     })
 }
 
@@ -91,6 +120,13 @@ function clearAll(){
 
 
 
+// function lightScroll() {
+//   const { height: cardHeight } = document.querySelector(".gallery")
+//     .firstElementChild.getBoundingClientRect();
 
-
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: "smooth",
+// });
+// }
 
