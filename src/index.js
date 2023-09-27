@@ -6,11 +6,11 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 const refs = {
     searchForm: document.getElementById('search-form'),
     allPhotos : document.querySelector('.gallery'),
-    btnLoadMore: document.querySelector('.btn-js'),
-    guard: document.querySelector('.guard'),
+    moreBtn: document.querySelector('.load-more'),
 }
 
 refs.searchForm.addEventListener('submit', onSearch);
+refs.moreBtn.addEventListener('click', moreSearch);
 // document.addEventListener('scroll', lightScroll)
 
 let totalPage = 13;
@@ -21,37 +21,6 @@ const lightbox = new SimpleLightbox('.photo-link',{
     captionsDelay: 100,
 }
 );
-
-const params = {
-  root: null,
-  rootMargin: '200px',
-  threshold: 1
-};
-
-function observeObj(entries){
-console.log(entries)
-entries.forEach(entry => {
-  if (entry.isIntersecting) {
-    observer.unobserve(entry.target);
-    apiPhotoService.page += 1;
-    if (entry.intersectionRatio === 1 && apiPhotoService.page === totalPage) {
-      Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
-  }
-    apiPhotoService.fetchPhoto().then(data =>{  
-      renderMarkupPhotos(data);
-      const hasPhoto = apiPhotoService.page < totalPage && data.totalHits === 500;
-      if (hasPhoto) {
-        if (data.totalHits < 500) {
-            return;
-        }
-        observer.observe(refs.guard);
-    }
-  })
-}
-})
-};
-
-const observer = new IntersectionObserver(observeObj, params);
 
 
  function onSearch(e) {
@@ -67,16 +36,39 @@ const observer = new IntersectionObserver(observeObj, params);
     apiPhotoService.resetPage();
    apiPhotoService.fetchPhoto().then(data => {
      const {hits, totalHits} = data;
+     console.log('totalHits: ', typeof(totalHits));
+     console.log('hits: ', hits);
      if (hits.length === 0) {
        clearAll();
        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
        return;
      }
+    refs.moreBtn.classList.remove('is-hidden');
      
      renderMarkupPhotos(data);
       Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
     })
 }
+
+function moreSearch(e) {
+  e.preventDefault();
+  apiPhotoService.fetchPhoto().then(data => {
+    const { hits, totalHits } = data;
+    renderMarkupPhotos(data);
+
+console.log(apiPhotoService.PER_PAGE);
+console.log(apiPhotoService.PAGE);
+console.log(totalHits <= apiPhotoService.PER_PAGE*apiPhotoService.PAGE);
+      if(totalHits <= apiPhotoService.PER_PAGE*apiPhotoService.PAGE){
+
+      refs.moreBtn.classList.add('is-hidden');
+                Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        return;
+      }
+    }
+  )
+}
+
 
 
  function renderMarkupPhotos(data){

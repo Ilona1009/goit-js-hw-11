@@ -38,6 +38,8 @@ export default class ApiPhotoService {
     set page(newPage){
         this.PAGE = newPage;
     }
+
+
     resetPage(){
         this.PAGE = 1;
     }
