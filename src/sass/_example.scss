@@ -12,13 +12,17 @@
 
   body {
   scroll-behavior: smooth;
+      width: 1200px;
+        text-align: center;
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
-  margin: 0;
   margin-top: 52px;
+  margin-left: auto;
+  margin-right: auto;
   padding: 16px 8px;
   font-size: 12px;
+
   }
   .search-form{
     position: fixed;
@@ -60,8 +64,8 @@
     justify-content: center;
     padding: 0;
     list-style: none;
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: 50px;
+    margin-right: 50px;
   }
   
   .gallery-image {
@@ -99,15 +103,16 @@
     display: flex;
   }
 
-  .loagd-more{
+  .load-more{
+    margin-top: 40px;
         width: 200px;
           height: 40px;
           cursor: pointer;
-          background-color: #b1f994;
-          border-radius: 10px;
-          margin-bottom: 40px;
-          font-size: x-large;
-          box-shadow: 0 4px 4px gray;
+          background-color:#b1b272;
+          border-radius: 4px;
+              margin-bottom: 40px;
+          font-size: 16px;
+              border: none;
         }
 
 .is-hidden {

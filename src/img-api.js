@@ -11,7 +11,6 @@ export default class ApiPhotoService {
 
 
     async fetchPhoto() {
-    
         const searchParams = new URLSearchParams({
             key: this.KEY,
             q: this.searchQuery,
@@ -22,11 +21,13 @@ export default class ApiPhotoService {
             per_page: this.PER_PAGE,
         });
         const newParams = searchParams.toString()
-        try{ const response = await axios.get(`${this.URL}?${newParams}`)
+        try {
+            const response = await axios.get(`${this.URL}?${newParams}`)
         if (response.status !== 200) {
             throw new Error(response.status);
-          }
-          this.PAGE += 1;
+            }
+            this.PAGE += 1;
+          console.log(response.data);
           return response.data;
         } catch (error) {
          console.log();(error.message);
@@ -39,6 +40,9 @@ export default class ApiPhotoService {
         this.PAGE = newPage;
     }
 
+    incrementPage() {
+        this.PAGE += 1;
+    }
 
     resetPage(){
         this.PAGE = 1;
