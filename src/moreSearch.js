@@ -3,7 +3,6 @@ import { renderMarkupPhotos } from './renderMarkupPhotos';
 import { refs } from "./index";
 import Notiflix from 'notiflix';
 
-
 const apiPhotoService = new ApiPhotoService();
 
 export function moreSearch(e) {

@@ -2,6 +2,7 @@ import ApiPhotoService from './img-api';
 import { renderMarkupPhotos } from './renderMarkupPhotos';
 import { refs } from "./index";
 import Notiflix from 'notiflix';
+import { moreSearch } from './moreSearch';
 
 const apiPhotoService = new ApiPhotoService();
 
@@ -35,3 +36,4 @@ export function onSearch(e) {
 function clearAll(){
     refs.allPhotos.innerHTML = '';
 }
+
