@@ -5,7 +5,7 @@
   "homepage": "https://Ilona1009.github.io/hw11",
   "scripts": {
     "start": "parcel src/*.html",
-    "build": "parcel build src/*.https://github.com/hw11"
+    "build": "parcel build src/*.html --public-url/hw11"
   },
   "repository": {
     "type": "git",
