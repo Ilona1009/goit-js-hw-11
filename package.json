@@ -2,10 +2,10 @@
   "name": "parcel",
   "version": "2.0.0",
   "description": "",
-  "homepage": "https://Ilona1009.github.io/hw11 ",
+  "homepage": "https://Ilona1009.github.io/hw11",
   "scripts": {
     "start": "parcel src/*.html",
-    "build": "parcel build src/*.html --public-url/hw11 "
+    "build": "parcel build src/*.html --public-url/hw11"
   },
   "repository": {
     "type": "git",
